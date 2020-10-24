@@ -1,3 +1,6 @@
+import csv
+
+
 class Worker:
     def __init__(self, person_id, name, surname, birth_date, email, phone_number, hire_date):
         self.person_id = person_id
@@ -31,9 +34,6 @@ class Worker:
         return data_string
 
     def csv_format(self):
-        fields_list = [self.name, self.surname, self.birth_date, self.email, self.phone_number, self.hire_date]
-        fields_list = map(str, fields_list)
-        string = ",".join(fields_list)
-        #string = f'{self.person_id},{self.name},{self.surname},{self.birth_date},{self.email},' \
-        #        f'{self.phone_number},' f'{self.hire_date}'
+        string = f'{self.person_id},{self.name},{self.surname},{self.birth_date},{self.email},' \
+                 f'{self.phone_number},' f'{self.hire_date}'
         return string
