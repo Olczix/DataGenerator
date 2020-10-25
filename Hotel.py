@@ -8,3 +8,6 @@ class Hotel:
     def csv_format(self):
         string = f'{self.hotel_id},{self.name},{self.location_id},{self.stars}'
         return string
+
+    def get_id(self):
+        return self.hotel_id

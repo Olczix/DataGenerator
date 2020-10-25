@@ -36,10 +36,6 @@ def generate_workers_personal_data(file_name, number_of_people):
             file.write(worker.csv_format()+'\n')
 
 
-def generate_work_efficiency_data(file_name):
-    print('ok')
-
-
 def generate_airlines(file_name, number_of_airlines):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_airlines):
@@ -118,11 +114,42 @@ def generate_attraction_packs_data(file_name, number_of_attraction_packs):
             file.write(attraction_pack.csv_format() + '\n')
 
 
+def generate_offers_data(file_name, number_of_offers):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(0, number_of_offers):
+            offer_id = i + 1
+            hotel_id = random.choice(hotels).get_id()
+            flight_id = random.choice(flights).get_id()
+            attraction_pack_id = random.choice(attraction_packs).get_id()
+            max_participants_number = random.randint(50, 150)
+            participants = random.randint(1, max_participants_number)
+            hotel_price = random.randint(1000, 5000)
+            hotel_rating = round(random.uniform(1.0, 5.0), 2)
+            flight_rating = round(random.uniform(1.0, 5.0), 2)
+            attraction_pack_rating = round(random.uniform(1.0, 5.0), 2)
+            overall_rating = round((hotel_rating+flight_rating+attraction_pack_rating)/3.0, 2)
+
+            offer = Offer(offer_id, hotel_id, flight_id, attraction_pack_id, max_participants_number,
+                          participants, overall_rating, hotel_price, hotel_rating, flight_rating, attraction_pack_rating)
+            offers.append(offer)
+
+            file.write(offer.csv_format() + '\n')
+
+
+def generate_work_efficiency_data(file_name):
+    print('ok')
+
+
 if __name__ == '__main__':
     generate_airlines('Data/airlines.csv', 3)
     generate_workers_personal_data('Data/workers_data.csv', 10)
-    generate_work_efficiency_data('Data/work_efficiency_data.txt')
     generate_locations('Data/locations.csv', 10)
     generate_flights('Data/flights.csv', 5)
     generate_hotels_data('Data/hotels_data.csv', 10)
     generate_attraction_packs_data('Data/attraction_packs_data.csv', 5)
+    generate_offers_data('Data/offers_data.csv', 50)
+
+    generate_work_efficiency_data('Data/work_efficiency_data.txt')
+
+
+
