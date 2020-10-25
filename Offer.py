@@ -18,3 +18,6 @@ class Offer:
                  f'{self.max_participants_number},{self.participants},{self.overall_rating},' \
                  f'{self.hotel_price},{self.hotel_rating},{self.flight_rating},{self.attraction_pack_rating}'
         return string
+
+    def get_id(self):
+        return self.offer_id

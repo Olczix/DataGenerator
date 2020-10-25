@@ -9,6 +9,14 @@ from Offer import Offer
 import random
 from datetime import datetime, timedelta
 
+number_of_hotels = 100
+number_of_workers = 15
+number_of_airlines = 10
+number_of_locations = 50
+number_of_flights = 200
+number_of_attraction_packs = 7
+number_of_offers = 500
+
 faker = Faker()
 airlines = []
 flights = []
@@ -16,13 +24,13 @@ attraction_packs = []
 locations = []
 hotels = []
 offers = []
-workers_personal_data = []
+workers = []
 work_efficiency_data = []
 
 
-def generate_workers_personal_data(file_name, number_of_people):
+def generate_workers_personal_data(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
-        for i in range(1, number_of_people+1):
+        for i in range(1, number_of_workers+1):
             name = faker.name_male() if i % 3 == 1 else faker.name_female()
             name, surname = name.split(' ', 1)
             birth_date = str(faker.date_of_birth())
@@ -31,12 +39,14 @@ def generate_workers_personal_data(file_name, number_of_people):
             hire_date = str(faker.date_this_century())
 
             worker = Worker(i, name, surname, birth_date, email, phone, hire_date)
-            workers_personal_data.append(worker)
+            workers.append(worker)
 
-            file.write(worker.csv_format()+'\n')
+            file.write(worker.csv_format())
+            if i != number_of_workers-1:
+                file.write('\n')
 
 
-def generate_airlines(file_name, number_of_airlines):
+def generate_airlines(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_airlines):
             name = faker.last_name() + ' Airline'
@@ -47,10 +57,12 @@ def generate_airlines(file_name, number_of_airlines):
             airline = Airline(name, rating, plane_name, max_passengers_number)
             airlines.append(airline)
 
-            file.write(airline.csv_format()+'\n')
+            file.write(airline.csv_format())
+            if i != number_of_airlines-1:
+                file.write('\n')
 
 
-def generate_locations(file_name, number_of_locations):
+def generate_locations(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_locations):
             location_id = i+1
@@ -62,10 +74,12 @@ def generate_locations(file_name, number_of_locations):
             location = Location(location_id, country, city, population)
             locations.append(location)
 
-            file.write(location.csv_format() + '\n')
+            file.write(location.csv_format())
+            if i != number_of_locations-1:
+                file.write('\n')
 
 
-def generate_flights(file_name, number_of_flights):
+def generate_flights(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_flights):
             flight_id = i+1
@@ -83,10 +97,12 @@ def generate_flights(file_name, number_of_flights):
             flight = Flight(flight_id, airline, departure, departure_time, destination, destination_time, price)
             flights.append(flight)
 
-            file.write(flight.csv_format() + '\n')
+            file.write(flight.csv_format())
+            if i != number_of_flights-1:
+                file.write('\n')
 
 
-def generate_hotels_data(file_name, number_of_hotels):
+def generate_hotels_data(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_hotels):
             hotel_id = i+1
@@ -97,10 +113,12 @@ def generate_hotels_data(file_name, number_of_hotels):
             hotel = Hotel(hotel_id, name, location_id, stars)
             hotels.append(hotel)
 
-            file.write(hotel.csv_format() + '\n')
+            file.write(hotel.csv_format())
+            if i != number_of_hotels-1:
+                file.write('\n')
 
 
-def generate_attraction_packs_data(file_name, number_of_attraction_packs):
+def generate_attraction_packs_data(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_attraction_packs):
             attraction_pack_id = i+1
@@ -111,10 +129,12 @@ def generate_attraction_packs_data(file_name, number_of_attraction_packs):
             attraction_pack = AttractionPack(attraction_pack_id, name, description, price)
             attraction_packs.append(attraction_pack)
 
-            file.write(attraction_pack.csv_format() + '\n')
+            file.write(attraction_pack.csv_format())
+            if i != number_of_attraction_packs-1:
+                file.write('\n')
 
 
-def generate_offers_data(file_name, number_of_offers):
+def generate_offers_data(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_offers):
             offer_id = i + 1
@@ -133,23 +153,42 @@ def generate_offers_data(file_name, number_of_offers):
                           participants, overall_rating, hotel_price, hotel_rating, flight_rating, attraction_pack_rating)
             offers.append(offer)
 
-            file.write(offer.csv_format() + '\n')
+            file.write(offer.csv_format())
+            if i != number_of_offers-1:
+                file.write('\n')
 
 
 def generate_work_efficiency_data(file_name):
-    print('ok')
+
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(1, number_of_offers+1):
+            string = ''
+            string += str(i) + ','
+            string += str(random.choice(workers).get_id()) + ','
+            hotel_time = random.randint(5, 60)
+            flight_time = random.randint(5, 60)
+            attraction_pack_time = random.randint(5, 60)
+            additional_vaccinations_time = random.randint(5, 60)
+            additional_docs = random.randint(5, 60)
+            time = hotel_time + flight_time + attraction_pack_time + additional_docs + additional_vaccinations_time
+            string += str(hotel_time) + ','
+            string += str(flight_time) + ','
+            string += str(attraction_pack_time) + ','
+            string += str(additional_vaccinations_time) + ','
+            string += str(additional_docs) + ','
+            string += str(time) + ','
+            string += str(faker.date_time_this_century())
+            file.write(string)
+            if i != number_of_offers - 1:
+                file.write('\n')
 
 
 if __name__ == '__main__':
-    generate_airlines('Data/airlines.csv', 3)
-    generate_workers_personal_data('Data/workers_data.csv', 10)
-    generate_locations('Data/locations.csv', 10)
-    generate_flights('Data/flights.csv', 5)
-    generate_hotels_data('Data/hotels_data.csv', 10)
-    generate_attraction_packs_data('Data/attraction_packs_data.csv', 5)
-    generate_offers_data('Data/offers_data.csv', 50)
-
-    generate_work_efficiency_data('Data/work_efficiency_data.txt')
-
-
-
+    generate_airlines('Data/airlines.csv')
+    generate_workers_personal_data('Data/workers_data.csv')
+    generate_locations('Data/locations.csv')
+    generate_flights('Data/flights.csv')
+    generate_hotels_data('Data/hotels_data.csv')
+    generate_attraction_packs_data('Data/attraction_packs_data.csv')
+    generate_offers_data('Data/offers_data.csv')
+    generate_work_efficiency_data('Data/work_efficiency_data.csv')

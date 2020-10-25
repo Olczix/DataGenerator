@@ -24,3 +24,6 @@ class Worker:
         string = f'{self.person_id},{self.name},{self.surname},{self.birth_date},{self.email},' \
                  f'{self.phone_number},' f'{self.hire_date}'
         return string
+
+    def get_id(self):
+        return self.person_id
