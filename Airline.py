@@ -8,3 +8,6 @@ class Airline:
     def csv_format(self):
         string = f'{self.name},{self.rating},{self.plane_name},{self.max_passengers_number}'
         return string
+
+    def get_name(self):
+        return self.name
