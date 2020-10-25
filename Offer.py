@@ -1,6 +1,6 @@
 class Offer:
     def __init__(self, offer_id, hotel_id, flight_id, attraction_pack_id, max_participants_number,
-                 participants, overall_rating, hotel_price, hotel_rating, flight_rating, attraction_pack_rating):
+                 participants, overall_rating, hotel_price, hotel_rating, flight_rating, attraction_pack_rating, sum):
         self.offer_id = offer_id
         self.hotel_id = hotel_id
         self.flight_id = flight_id
@@ -12,12 +12,19 @@ class Offer:
         self.hotel_rating = hotel_rating
         self.flight_rating = flight_rating
         self.attraction_pack_rating = attraction_pack_rating
+        self.sum = sum
 
     def csv_format(self):
         string = f'{self.offer_id},{self.hotel_id},{self.flight_id},{self.attraction_pack_id},' \
                  f'{self.max_participants_number},{self.participants},{self.overall_rating},' \
-                 f'{self.hotel_price},{self.hotel_rating},{self.flight_rating},{self.attraction_pack_rating}'
+                 f'{self.hotel_price},{self.hotel_rating},{self.flight_rating},{self.attraction_pack_rating},{self.sum}'
         return string
 
     def get_id(self):
         return self.offer_id
+
+    def get_participants(self):
+        return self.participants
+
+    def set_participants(self, number):
+        self.participants = number
