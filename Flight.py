@@ -12,4 +12,3 @@ class Flight:
         string = f'{self.flight_id},{self.airline},{self.departure},{self.departure_time},' \
                  f'{self.destination},{self.destination_time},{self.price}'
         return string
-

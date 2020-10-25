@@ -3,6 +3,9 @@ from Airline import Airline
 from Worker import Worker
 from Location import Location
 from Flight import Flight
+from Hotel import Hotel
+from AttractionPack import AttractionPack
+from Offer import Offer
 import random
 from datetime import datetime, timedelta
 
@@ -87,9 +90,39 @@ def generate_flights(file_name, number_of_flights):
             file.write(flight.csv_format() + '\n')
 
 
+def generate_hotels_data(file_name, number_of_hotels):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(0, number_of_hotels):
+            hotel_id = i+1
+            name = faker.word().capitalize() + ' Hotel'
+            location_id = random.choice(locations).get_id()
+            stars = random.randint(1, 5)
+
+            hotel = Hotel(hotel_id, name, location_id, stars)
+            hotels.append(hotel)
+
+            file.write(hotel.csv_format() + '\n')
+
+
+def generate_attraction_packs_data(file_name, number_of_attraction_packs):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(0, number_of_attraction_packs):
+            attraction_pack_id = i+1
+            name = faker.word().capitalize() + ' Pack'
+            description = faker.words(5)
+            price = random.randint(100, 1000)
+
+            attraction_pack = AttractionPack(attraction_pack_id, name, description, price)
+            attraction_packs.append(attraction_pack)
+
+            file.write(attraction_pack.csv_format() + '\n')
+
+
 if __name__ == '__main__':
     generate_airlines('Data/airlines.csv', 3)
     generate_workers_personal_data('Data/workers_data.csv', 10)
     generate_work_efficiency_data('Data/work_efficiency_data.txt')
     generate_locations('Data/locations.csv', 10)
     generate_flights('Data/flights.csv', 5)
+    generate_hotels_data('Data/hotels_data.csv', 10)
+    generate_attraction_packs_data('Data/attraction_packs_data.csv', 5)

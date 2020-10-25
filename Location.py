@@ -11,3 +11,6 @@ class Location:
 
     def get_location(self):
         return f'{self.country},{self.city}'
+
+    def get_id(self):
+        return f'{self.location_id}'
