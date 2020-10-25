@@ -11,3 +11,6 @@ class Hotel:
 
     def get_id(self):
         return self.hotel_id
+
+    def set_stars(self, stars):
+        self.stars = stars

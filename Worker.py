@@ -27,3 +27,6 @@ class Worker:
 
     def get_id(self):
         return self.person_id
+
+    def set_phone(self, phone):
+        self.phone_number = phone

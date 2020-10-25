@@ -15,3 +15,9 @@ class Flight:
 
     def get_id(self):
         return self.flight_id
+
+    def set_price(self, price):
+        self.price = price
+
+    def get_price(self):
+        return self.price

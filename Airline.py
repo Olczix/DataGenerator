@@ -11,3 +11,6 @@ class Airline:
 
     def get_name(self):
         return self.name
+
+    def set_max_passengers_number(self, number):
+        self.max_passengers_number = number

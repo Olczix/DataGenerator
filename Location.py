@@ -14,3 +14,9 @@ class Location:
 
     def get_id(self):
         return f'{self.location_id}'
+
+    def get_population(self):
+        return self.population
+
+    def set_population(self, population):
+        self.population = population
