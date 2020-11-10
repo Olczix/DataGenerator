@@ -13,13 +13,13 @@ from datetime import datetime, timedelta
 
 number_of_dates = 500
 number_of_times = 200
-number_of_hotels = 1500
-number_of_workers = 500
-number_of_airlines = 20
-number_of_locations = 200
-number_of_flights = 2000
+number_of_hotels = 8500
+number_of_workers = 5000
+number_of_airlines = 100
+number_of_locations = 2000
+number_of_flights = 20000
 number_of_attraction_packs = 20
-number_of_offers = 5000
+number_of_offers = 150000
 
 faker = Faker()
 airlines = []
