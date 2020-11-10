@@ -1,4 +1,6 @@
 from faker import Faker
+from Date import Date
+from Time import Time
 from Airline import Airline
 from Worker import Worker
 from Location import Location
@@ -10,6 +12,7 @@ import random
 from datetime import datetime, timedelta
 
 number_of_dates = 500
+number_of_times = 200
 number_of_hotels = 1500
 number_of_workers = 500
 number_of_airlines = 20
@@ -28,15 +31,45 @@ offers = []
 workers = []
 work_efficiency_data = []
 dates = []
+times = []
+
+work_experience_categories = ['under 1 year', 'between 1 year and 5 years', 'above 5 years']
+age_categories = ['under 20', 'between 21 and 30', 'between 31 and 40', 'between 41 and 50', 'above 50']
+max_passenger_number_categories = ['under 100', 'between 101 and 250', 'between 251 and 500', 'above 500']
+population_categories = ['under 100 000', 'between 100 000 and 500 000', 'above 500 000']
+prices = ['under 100PLN', 'between 100PLN and 250PLN', 'between 250PLN and 500PLN', 'above 500PLN']
+
 
 def generate_dates(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(1, number_of_dates):
-            year = faker.year()
-            month = faker.month()
-            day = faker.day()
+            date = faker.date_this_century()
+            year = str(date)[:4]
+            month = str(date)[5:-3]
+            day = str(date)[-2:]
+
+            date = Date(i, date, year, month, day)
+            dates.append(date)
+
+            file.write(date.csv_format())
+            if i != number_of_dates:
+                file.write('\n')
 
 
+def generate_times(file_name):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(1, number_of_times):
+            time = faker.time()
+            hour = str(time)[:2]
+            minute = str(time)[3:-3]
+            seconds = str(time)[-2:]
+
+            time = Time(i, time, hour, minute, seconds)
+            times.append(time)
+
+            file.write(time.csv_format())
+            if i != number_of_times:
+                file.write('\n')
 
 
 def generate_workers_personal_data(file_name):
@@ -44,12 +77,12 @@ def generate_workers_personal_data(file_name):
         for i in range(1, number_of_workers+1):
             name = faker.name_male() if i % 3 == 0 else faker.name_female()
             name, surname = name.split(' ', 1)
-            birth_date = str(faker.date_of_birth())
+            birth_date = random.choice(age_categories)
             email = faker.email()
             phone = faker.numerify('#########')
-            hire_date = str(faker.date_this_century())
+            work_experience = random.choice(work_experience_categories)
 
-            worker = Worker(i, name, surname, birth_date, email, phone, hire_date)
+            worker = Worker(i, name, surname, birth_date, email, phone, work_experience)
             workers.append(worker)
 
             file.write(worker.csv_format())
@@ -67,12 +100,12 @@ def generate_workers_personal_data_t2(file_name):
         for i in range(1, int(number_of_workers/10)):
             name = faker.name_male() if i % 3 == 0 else faker.name_female()
             name, surname = name.split(' ', 1)
-            birth_date = str(faker.date_of_birth())
+            age = random.choice(age_categories)
             email = faker.email()
             phone = faker.numerify('#########')
-            hire_date = str(faker.date_this_century())
+            work_experience = random.choice(work_experience_categories)
 
-            worker = Worker(number_of_workers+i, name, surname, birth_date, email, phone, hire_date)
+            worker = Worker(number_of_workers+i, name, surname, age, email, phone, work_experience)
             workers.append(worker)
 
             file.write(worker.csv_format())
@@ -87,7 +120,7 @@ def generate_airlines(file_name):
             name = faker.last_name() + ' Airline'
             rating = random.randint(100, 500)/100
             plane_name = faker.word() + 'Jet'
-            max_passengers_number = faker.random_int(200, 400)
+            max_passengers_number = random.choice(max_passenger_number_categories)
 
             airline = Airline(airline_id, name, rating, plane_name, max_passengers_number)
             airlines.append(airline)
@@ -101,7 +134,7 @@ def generate_airlines_t2(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_airlines):
             if i % 5 == 0:
-                max_passengers_number = faker.random_int(100, 200)
+                max_passengers_number = random.choice(max_passenger_number_categories)
                 airlines[i].set_max_passengers_number(max_passengers_number)
             file.write(airlines[i].csv_format()+'\n')
 
@@ -110,7 +143,7 @@ def generate_airlines_t2(file_name):
             name = faker.last_name() + ' Airline'
             rating = random.randint(100, 500)/100
             plane_name = faker.word() + 'Jet'
-            max_passengers_number = faker.random_int(200, 400)
+            max_passengers_number = random.choice(max_passenger_number_categories)
 
             airline = Airline(airline_id, name, rating, plane_name, max_passengers_number)
             airlines.append(airline)
@@ -125,9 +158,8 @@ def generate_locations(file_name):
         for i in range(0, number_of_locations):
             location_id = i+1
             country = faker.country()
-            city = faker.word() + ' City'
-            # city = faker.city()
-            population = faker.random_int(40000, 98829389)
+            city = faker.word().capitalize() + ' City'
+            population = random.choice(population_categories)
 
             location = Location(location_id, country, city, population)
             locations.append(location)
@@ -141,13 +173,13 @@ def generate_locations_t2(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_locations):
             if i % 5 == 0:
-                locations[i].set_population(locations[i].get_population()+random.randint(10000, 1000000))
+                locations[i].set_population(random.choice(population_categories))
             file.write(locations[i].csv_format()+'\n')
 
         for i in range(0, int(number_of_locations/10)):
             location_id = number_of_locations+i+1
             country = faker.country()
-            city = faker.word() + ' City'
+            city = faker.word().capitalize() + ' City'
             # city = faker.city()
             population = faker.random_int(40000, 98829389)
 
@@ -170,11 +202,10 @@ def generate_flights(file_name):
             if destination == departure:
                 destination = random.choice(locations).get_id()
 
-            departure_time = faker.date_time_this_century()
-            destination_time = departure_time + timedelta(hours=random.randint(2, 15))
-            price = random.randint(100, 2000)
+            departure_date = random.choice(dates).get_id()
+            departure_time = random.choice(times).get_id()
 
-            flight = Flight(flight_id, airline, departure, departure_time, destination, destination_time, price)
+            flight = Flight(flight_id, airline, departure, destination, departure_date, departure_time)
             flights.append(flight)
 
             file.write(flight.csv_format())
@@ -186,7 +217,7 @@ def generate_flights_t2(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_flights):
             if i % 10 == 0:
-                flights[i].set_price(flights[i].get_price()+random.randint(50, 500))
+                flights[i].set_time(random.choice(times).get_id())
             file.write(flights[i].csv_format()+'\n')
 
         for i in range(0, int(number_of_flights/10)):
@@ -198,11 +229,10 @@ def generate_flights_t2(file_name):
             if destination == departure:
                 destination = random.choice(locations).get_id()
 
-            departure_time = faker.date_time_this_century()
-            destination_time = departure_time + timedelta(hours=random.randint(2, 15))
-            price = random.randint(100, 2000)
+            departure_date = random.choice(dates).get_id()
+            departure_time = random.choice(times).get_id()
 
-            flight = Flight(flight_id, airline, departure, departure_time, destination, destination_time, price)
+            flight = Flight(flight_id, airline, departure, destination, departure_date, departure_time)
             flights.append(flight)
 
             file.write(flight.csv_format())
@@ -257,9 +287,8 @@ def generate_attraction_packs_data(file_name):
                 description = description + faker.word()
                 if j != 4:
                     description += ' '
-            price = random.randint(100, 1000)
 
-            attraction_pack = AttractionPack(attraction_pack_id, name, description, price)
+            attraction_pack = AttractionPack(attraction_pack_id, name, description)
             attraction_packs.append(attraction_pack)
 
             file.write(attraction_pack.csv_format())
@@ -271,7 +300,7 @@ def generate_attraction_packs_data_t2(file_name):
     with open(file_name, 'w', encoding='utf-8') as file:
         for i in range(0, number_of_attraction_packs):
             if i % 5 == 0:
-                attraction_packs[i].set_price(attraction_packs[i].get_price()+random.randint(-100,100))
+                attraction_packs[i].set_name(faker.word().capitalize() + ' Pack')
             file.write(attraction_packs[i].csv_format()+'\n')
 
         for i in range(0, int(number_of_attraction_packs/10)):
@@ -282,9 +311,8 @@ def generate_attraction_packs_data_t2(file_name):
                 description = description + faker.word()
                 if j != 4:
                     description += ' '
-            price = random.randint(100, 1000)
 
-            attraction_pack = AttractionPack(attraction_pack_id, name, description, price)
+            attraction_pack = AttractionPack(attraction_pack_id, name, description)
             attraction_packs.append(attraction_pack)
 
             file.write(attraction_pack.csv_format())
@@ -301,16 +329,17 @@ def generate_offers_data(file_name):
             attraction_pack_id = random.choice(attraction_packs).get_id()
             max_participants_number = random.randint(50, 150)
             participants = random.randint(1, max_participants_number)
-            hotel_price = random.randint(1000, 5000)
+            hotel_price = random.choice(prices)
             hotel_rating = round(random.uniform(1.0, 5.0), 2)
+            flight_price = random.choice(prices)
             flight_rating = round(random.uniform(1.0, 5.0), 2)
+            attraction_pack_price = random.choice(prices)
             attraction_pack_rating = round(random.uniform(1.0, 5.0), 2)
             overall_rating = round((hotel_rating+flight_rating+attraction_pack_rating)/3.0, 2)
-            sum_cash = hotel_price + attraction_packs[attraction_pack_id-1].get_price() + flights[flight_id-1].get_price()
 
             offer = Offer(offer_id, hotel_id, flight_id, attraction_pack_id, max_participants_number,
-                          participants, overall_rating, hotel_price, hotel_rating, flight_rating,
-                          attraction_pack_rating, sum_cash)
+                          participants, overall_rating, hotel_price, hotel_rating, flight_price, flight_rating,
+                          attraction_pack_price, attraction_pack_rating)
             offers.append(offer)
 
             file.write(offer.csv_format())
@@ -332,16 +361,17 @@ def generate_offers_data_t2(file_name):
             attraction_pack_id = random.choice(attraction_packs).get_id()
             max_participants_number = random.randint(50, 150)
             participants = random.randint(1, max_participants_number)
-            hotel_price = random.randint(1000, 5000)
+            hotel_price = random.choice(prices)
             hotel_rating = round(random.uniform(1.0, 5.0), 2)
+            flight_price = random.choice(prices)
             flight_rating = round(random.uniform(1.0, 5.0), 2)
+            attraction_pack_price = random.choice(prices)
             attraction_pack_rating = round(random.uniform(1.0, 5.0), 2)
-            overall_rating = round((hotel_rating+flight_rating+attraction_pack_rating)/3.0, 2)
-            sum_cash = hotel_price + attraction_packs[attraction_pack_id-1].get_price() + flights[flight_id-1].get_price()
+            overall_rating = round((hotel_rating + flight_rating + attraction_pack_rating) / 3.0, 2)
 
             offer = Offer(offer_id, hotel_id, flight_id, attraction_pack_id, max_participants_number,
-                          participants, overall_rating, hotel_price, hotel_rating, flight_rating,
-                          attraction_pack_rating, sum_cash)
+                          participants, overall_rating, hotel_price, hotel_rating, flight_price, flight_rating,
+                          attraction_pack_price, attraction_pack_rating)
             offers.append(offer)
 
             file.write(offer.csv_format())
@@ -401,6 +431,8 @@ def generate_work_efficiency_data_t2(file_name):
 
 if __name__ == '__main__':
     # data at T1
+    generate_dates('Data/T1/dates_t1.bulk')
+    generate_times('Data/T1/times_t1.bulk')
     generate_airlines('Data/T1/airlines_t1.bulk')
     generate_workers_personal_data('Data/T1/workers_data_t1.bulk')
     generate_locations('Data/T1/locations_t1.bulk')
@@ -411,7 +443,7 @@ if __name__ == '__main__':
     generate_work_efficiency_data('Data/T1/work_efficiency_data_t1.bulk')
 
     # data at T2
-    '''generate_airlines_t2('Data/T2/airlines_t2.bulk')
+    generate_airlines_t2('Data/T2/airlines_t2.bulk')
     generate_workers_personal_data_t2('Data/T2/workers_data_t2.bulk')
     generate_locations_t2('Data/T2/locations_t2.bulk')
     generate_flights_t2('Data/T2/flights_t2.bulk')
@@ -419,4 +451,3 @@ if __name__ == '__main__':
     generate_attraction_packs_data_t2('Data/T2/attraction_packs_data_t2.bulk')
     generate_offers_data_t2('Data/T2/offers_data_t2.bulk')
     generate_work_efficiency_data_t2('Data/T2/work_efficiency_data_t2.bulk')
-'''
