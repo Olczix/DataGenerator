@@ -9,6 +9,7 @@ from Offer import Offer
 import random
 from datetime import datetime, timedelta
 
+number_of_dates = 500
 number_of_hotels = 1500
 number_of_workers = 500
 number_of_airlines = 20
@@ -26,6 +27,16 @@ hotels = []
 offers = []
 workers = []
 work_efficiency_data = []
+dates = []
+
+def generate_dates(file_name):
+    with open(file_name, 'w', encoding='utf-8') as file:
+        for i in range(1, number_of_dates):
+            year = faker.year()
+            month = faker.month()
+            day = faker.day()
+
+
 
 
 def generate_workers_personal_data(file_name):
@@ -315,7 +326,7 @@ def generate_offers_data_t2(file_name):
             file.write(offers[i].csv_format()+'\n')
 
         for i in range(0, int(number_of_offers/10)):
-            offer_id = i + 1
+            offer_id = number_of_offers + i + 1
             hotel_id = random.choice(hotels).get_id()
             flight_id = random.choice(flights).get_id()
             attraction_pack_id = random.choice(attraction_packs).get_id()
@@ -349,12 +360,14 @@ def generate_work_efficiency_data(file_name):
             attraction_pack_time = random.randint(5, 60)
             additional_vaccinations_time = random.randint(5, 60)
             additional_docs = random.randint(5, 60)
+            hotel_sale = random.randint(100, 500)
             time = hotel_time + flight_time + attraction_pack_time + additional_docs + additional_vaccinations_time
             string += str(hotel_time) + ','
             string += str(flight_time) + ','
             string += str(attraction_pack_time) + ','
             string += str(additional_vaccinations_time) + ','
             string += str(additional_docs) + ','
+            string += str(hotel_sale)+','
             string += str(time) + ','
             string += str(faker.date_time_this_century())
             file.write(string)
@@ -398,12 +411,12 @@ if __name__ == '__main__':
     generate_work_efficiency_data('Data/T1/work_efficiency_data_t1.bulk')
 
     # data at T2
-    generate_airlines_t2('Data/T2/airlines_t2.bulk')
+    '''generate_airlines_t2('Data/T2/airlines_t2.bulk')
     generate_workers_personal_data_t2('Data/T2/workers_data_t2.bulk')
     generate_locations_t2('Data/T2/locations_t2.bulk')
-    generate_flights_t2('Data/T2/flight_t2.bulk')
-    generate_hotels_data_t2('Data/T2/hotels_t2.bulk')
+    generate_flights_t2('Data/T2/flights_t2.bulk')
+    generate_hotels_data_t2('Data/T2/hotels_data_t2.bulk')
     generate_attraction_packs_data_t2('Data/T2/attraction_packs_data_t2.bulk')
     generate_offers_data_t2('Data/T2/offers_data_t2.bulk')
     generate_work_efficiency_data_t2('Data/T2/work_efficiency_data_t2.bulk')
-
+'''
