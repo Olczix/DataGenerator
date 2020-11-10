@@ -399,33 +399,10 @@ def generate_work_efficiency_data(file_name):
             string += str(additional_docs) + ','
             string += str(hotel_sale)+','
             string += str(time) + ','
-            string += str(faker.date_time_this_century())
+            string += str(random.choice(dates).get_id()) + ','
+            string += str(random.choice(times).get_id())
             file.write(string)
             if i != number_of_offers - 1:
-                file.write('\n')
-
-
-def generate_work_efficiency_data_t2(file_name):
-    with open(file_name, 'w', encoding='utf-8') as file:
-        for i in range(0, int(number_of_offers/10)):
-            string = ''
-            string += str(i+1) + ','
-            string += str(random.choice(workers).get_id()) + ','
-            hotel_time = random.randint(5, 60)
-            flight_time = random.randint(5, 60)
-            attraction_pack_time = random.randint(5, 60)
-            additional_vaccinations_time = random.randint(5, 60)
-            additional_docs = random.randint(5, 60)
-            time = hotel_time + flight_time + attraction_pack_time + additional_docs + additional_vaccinations_time
-            string += str(hotel_time) + ','
-            string += str(flight_time) + ','
-            string += str(attraction_pack_time) + ','
-            string += str(additional_vaccinations_time) + ','
-            string += str(additional_docs) + ','
-            string += str(time) + ','
-            string += str(faker.date_time_this_century())
-            file.write(string)
-            if i != int(number_of_offers/10) - 1:
                 file.write('\n')
 
 
@@ -450,4 +427,3 @@ if __name__ == '__main__':
     generate_hotels_data_t2('Data/T2/hotels_data_t2.bulk')
     generate_attraction_packs_data_t2('Data/T2/attraction_packs_data_t2.bulk')
     generate_offers_data_t2('Data/T2/offers_data_t2.bulk')
-    generate_work_efficiency_data_t2('Data/T2/work_efficiency_data_t2.bulk')
